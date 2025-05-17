@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="cart-container">
+    <div class="cart-header">
+        <h1>Корзина</h1>
+        {% if cart %}
+            <div class="total-sum-header">
+                Итого: {{ total }} руб.
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="cart-content">
+        {% if cart %}
+            <div class="cart-items">
+                {% for item in cart %}
+                    <div class="cart-item">
+                        <div class="item-info">
+                            <h3>{{ item.service.name }}</h3>
+                            <p>{{ item.service.price }} руб. × {{ item.quantity }} = {{ item.service.price * item.quantity }} руб.</p>
+                        </div>
+                        <form method="POST" action="{{ url_for('remove_from_cart', index=loop.index0) }}">
+                            <button type="submit" class="remove-btn">
+                                <i class="fas fa-trash"></i> Удалить
+                            </button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-totals">
+                    <div class="summary-row total">
+                        <span>Итого к оплате:</span>
+                        <span>{{ total }} руб.</span>
+                    </div>
+                </div>
+
+                <div class="cart-actions">
+                    <a href="{{ url_for('show_services') }}" class="btn btn-continue">
+                        <i class="fas fa-arrow-left"></i> Продолжить выбор
+                    </a>
+                    <a href="{{ url_for('checkout') }}" class="btn btn-checkout">
+                        Оформить заказ <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Ваша корзина пуста</p>
+                <a href="{{ url_for('show_services') }}" class="btn btn-primary">
+                    Перейти к услугам
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="services-container">
+    <h1>Наши услуги</h1>
+
+    <div class="services-filter">
+        <button class="filter-btn active" data-category="all">Все услуги</button>
+        {% for category in categories %}
+            <button class="filter-btn" data-category="{{ category }}">{{ category|capitalize }}</button>
+        {% endfor %}
+    </div>
+
+    <div class="services-list">
+        {% for service in services %}
+            <div class="service-card" data-category="{{ service.category }}">
+                <h3>{{ service.name }}</h3>
+                <p class="service-category">{{ service.category|capitalize }}</p>
+                <p class="service-price">{{ service.price }} руб.</p>
+
+                <form method="POST" action="/add_to_cart">
+                    <input type="hidden" name="service_id" value="{{ service.id }}">
+                    <div class="quantity-selector">
+                        <button type="button" class="quantity-btn minus">-</button>
+                        <input type="number" name="quantity" value="1" min="1" class="quantity-input">
+                        <button type="button" class="quantity-btn plus">+</button>
+                    </div>
+                    <button type="submit" class="add-to-cart-btn">
+                        <i class="fas fa-cart-plus"></i> Добавить
+                    </button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if session.get('cart') %}
+        <a href="{{ url_for('show_cart') }}" class="continue-btn">
+            Перейти в корзину <i class="fas fa-arrow-right"></i>
+        </a>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const serviceCards = document.querySelectorAll('.service-card');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const category = this.dataset.category;
+
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            serviceCards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+    document.querySelectorAll('.quantity-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = this.parentElement.querySelector('.quantity-input');
+            let value = parseInt(input.value);
+
+            if (this.classList.contains('minus') && value > 1) {
+                input.value = value - 1;
+            } else if (this.classList.contains('plus')) {
+                input.value = value + 1;
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

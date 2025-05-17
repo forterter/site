@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Ремонтные услуги от профессионалов</h1>
+            <p>Качественный ремонт с гарантией результата</p>
+            <a href="{{ url_for('show_services') }}" class="cta-button">Выбрать услуги</a>
+        </div>
+        <img src="{{ url_for('static', filename='hero-image.png') }}" alt="Ремонтные работы" class="hero-image">
+    </section>
+
+    <section class="advantages">
+        <h2>Почему выбирают нас</h2>
+        <div class="advantages-grid">
+            <div class="advantage-card">
+                <img src="{{ url_for('static', filename='icon-time.png') }}" alt="Сроки">
+                <h3>Соблюдение сроков</h3>
+                <p>Точно в оговоренные даты</p>
+            </div>
+            <div class="advantage-card">
+                <img src="{{ url_for('static', filename='icon-quality.png') }}" alt="Качество">
+                <h3>Гарантия качества</h3>
+                <p>3 года на все виды работ</p>
+            </div>
+            <div class="advantage-card">
+                <img src="{{ url_for('static', filename='icon-price.png') }}" alt="Цены">
+                <h3>Фиксированные цены</h3>
+                <p>Без скрытых платежей</p>
+            </div>
+        </div>
+    </section>
+{% endblock %}
